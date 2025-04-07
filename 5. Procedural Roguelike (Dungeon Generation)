@@ -1,0 +1,24 @@
+#include <vector>
+#include <random>
+
+std::vector<std::vector<char>> generateDungeon(int width, int height) {
+    std::vector<std::vector<char>> dungeon(height, std::vector<char>(width, '#'));
+    std::mt19937 rng(std::random_device{}());
+    std::uniform_int_distribution<int> dist(0, width - 1);
+
+    for (int y = 1; y < height - 1; y++) {
+        for (int x = 1; x < width - 1; x++) {
+            if (dist(rng) % 3 == 0) dungeon[y][x] = '.';
+        }
+    }
+    return dungeon;
+}
+
+int main() {
+    auto dungeon = generateDungeon(40, 20);
+    for (const auto& row : dungeon) {
+        for (char cell : row) std::cout << cell;
+        std::cout << std::endl;
+    }
+    return 0;
+}
