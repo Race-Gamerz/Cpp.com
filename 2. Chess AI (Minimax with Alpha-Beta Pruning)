@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+int evaluateBoard(const std::vector<std::vector<int>>& board) {
+    // Simple evaluation: material count
+    int score = 0;
+    for (const auto& row : board) {
+        for (int piece : row) {
+            score += piece;
+        }
+    }
+    return score;
+}
+
+int minimax(std::vector<std::vector<int>>& board, int depth, bool isMax, int alpha, int beta) {
+    if (depth == 0) return evaluateBoard(board);
+    
+    if (isMax) {
+        int maxEval = -9999;
+        for (auto& move : generateMoves(board, true)) {
+            makeMove(board, move);
+            int eval = minimax(board, depth - 1, false, alpha, beta);
+            undoMove(board, move);
+            maxEval = std::max(maxEval, eval);
+            alpha = std::max(alpha, eval);
+            if (beta <= alpha) break; // Alpha-beta pruning
+        }
+        return maxEval;
+    } else {
+        int minEval = 9999;
+        for (auto& move : generateMoves(board, false)) {
+            makeMove(board, move);
+            int eval = minimax(board, depth - 1, true, alpha, beta);
+            undoMove(board, move);
+            minEval = std::min(minEval, eval);
+            beta = std::min(beta, eval);
+            if (beta <= alpha) break;
+        }
+        return minEval;
+    }
+}
+
+int main() {
+    std::vector<std::vector<int>> board(8, std::vector<int>(8, 0));
+    // Initialize board (e.g., 1 for pawn, 5 for queen, etc.)
+    int bestMoveScore = minimax(board, 3, true, -9999, 9999);
+    std::cout << "Best move score: " << bestMoveScore << std::endl;
+    return 0;
+}
