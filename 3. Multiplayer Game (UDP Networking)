@@ -1,0 +1,30 @@
+#include <enet/enet.h>
+#include <iostream>
+
+int main() {
+    if (enet_initialize() != 0) {
+        std::cerr << "Failed to initialize ENet!" << std::endl;
+        return 1;
+    }
+
+    ENetHost* server = enet_host_create(ENET_ADDRESS_TYPE_ANY, 7777, 2, 0, 0);
+    if (!server) {
+        std::cerr << "Failed to create server!" << std::endl;
+        return 1;
+    }
+
+    while (true) {
+        ENetEvent event;
+        while (enet_host_service(server, &event, 1000) > 0) {
+            switch (event.type) {
+                case ENET_EVENT_TYPE_RECEIVE:
+                    std::cout << "Packet received: " << event.packet->data << std::endl;
+                    enet_packet_destroy(event.packet);
+                    break;
+            }
+        }
+    }
+    enet_host_destroy(server);
+    enet_deinitialize();
+    return 0;
+}
