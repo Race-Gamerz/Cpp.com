@@ -1,0 +1,27 @@
+#include <Box2D/Box2D.h>
+
+int main() {
+    b2Vec2 gravity(0.0f, -9.8f);
+    b2World world(gravity);
+
+    b2BodyDef groundDef;
+    groundDef.position.Set(0.0f, -10.0f);
+    b2Body* ground = world.CreateBody(&groundDef);
+    b2PolygonShape groundBox;
+    groundBox.SetAsBox(50.0f, 10.0f);
+    ground->CreateFixture(&groundBox, 0.0f);
+
+    b2BodyDef carDef;
+    carDef.type = b2_dynamicBody;
+    carDef.position.Set(0.0f, 4.0f);
+    b2Body* car = world.CreateBody(&carDef);
+    b2PolygonShape carBox;
+    carBox.SetAsBox(2.0f, 1.0f);
+    car->CreateFixture(&carBox, 1.0f);
+
+    for (int i = 0; i < 60; ++i) {
+        world.Step(1.0f / 60.0f, 6, 2);
+        std::cout << "Car position: " << car->GetPosition().x << ", " << car->GetPosition().y << std::endl;
+    }
+    return 0;
+}
