@@ -1,0 +1,21 @@
+#include <fstream>
+
+void fileExample() {
+    // Writing to a file
+    ofstream outFile("example.txt");
+    if (outFile.is_open()) {
+        outFile << "Hello, World!\n";
+        outFile << 42 << "\n";
+        outFile.close();
+    }
+    
+    // Reading from a file
+    ifstream inFile("example.txt");
+    string line;
+    if (inFile.is_open()) {
+        while (getline(inFile, line)) {
+            cout << line << "\n";
+        }
+        inFile.close();
+    }
+}
