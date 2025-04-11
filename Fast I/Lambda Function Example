@@ -1,0 +1,9 @@
+void lambdaExample() {
+    auto sum = [](int a, int b) { return a + b; };
+    cout << sum(5, 3) << "\n"; // Output: 8
+    
+    vector<int> nums = {1, 2, 3, 4, 5};
+    int total = 0;
+    for_each(nums.begin(), nums.end(), [&total](int x) { total += x; });
+    cout << total << "\n"; // Output: 15
+}
